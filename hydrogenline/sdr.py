@@ -2,7 +2,7 @@ import numpy as np
 
 from rtlsdr import RtlSdr
 
-from typing import List
+from typing import List, Callable
 from numpy.typing import NDArray
 
 class SDR:
@@ -65,14 +65,14 @@ class SDR:
     def get_samples(self) -> NDArray:
         return self.dongle.read_samples(num_samples=self.bins)
     
-    def to_psd(self, x: NDArray, window: function) -> NDArray:
+    def to_psd(self, x: NDArray, window: Callable) -> NDArray:
         PSDw = np.sum(np.power(window(self.bins), 2))
         return np.power(np.abs(np.fft.fftshift(np.fft.fft(x*window(self.bins)))), 2)/self.sample_rate/PSDw
     
     def get_frequency(self) -> NDArray:
         return self.center_freq + np.linspace(-1,1,num=self.bins)*self.sample_rate/2
     
-    def get_averaged_spectrum(self, averages: int, windows: List[function]) -> NDArray:
+    def get_averaged_spectrum(self, averages: int, windows: List[Callable]) -> NDArray:
         num_windows = len(windows)
         S = np.zeros((num_windows, self.bins))
 
