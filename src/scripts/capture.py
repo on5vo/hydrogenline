@@ -32,7 +32,7 @@ def main():
     parser.add_argument("-g", "--gain", type=int, help="Gain in dB", default=0)
     parser.add_argument("-a", "--averages", type=int, help="Number of averages", default=100000)
     parser.add_argument("--start", type=str, help="Start date and time in the format YYYYMMDD HH:MM", default=datetime.now(local_tz).strftime("%Y%m%d %H:%M"))
-    parser.add_argument("--end", type=str, help="End date and time in the format YYYYMMDD HH:MM", default=None)
+    parser.add_argument("--stop", type=str, help="End date and time in the format YYYYMMDD HH:MM", default=None)
 
     args = parser.parse_args()
     
@@ -42,8 +42,9 @@ def main():
         print("No SDR device found. Exiting.")
         sys.exit(1)
 
-    # Get actual SDR gain
+    # Get actual SDR gain and center frequency
     args.gain = sdr.gain
+    vars(args)["center_freq"] = sdr.center_freq
 
     # Save settings to a file
     with open(get_path(args.folder) / f"settings.json", "wb") as f:
@@ -53,7 +54,7 @@ def main():
 
     # Schedule measurements
     t_start = datetime.strptime(args.start, "%Y%m%d %H:%M").replace(tzinfo=local_tz)
-    t_stop = datetime.strptime(args.end, "%Y%m%d %H:%M").replace(tzinfo=local_tz) if args.end is not None else None
+    t_stop = datetime.strptime(args.stop, "%Y%m%d %H:%M").replace(tzinfo=local_tz) if args.stop is not None else None
 
     t_now = datetime.now(local_tz)
     wheel = ["|", "/", "-", "\\"]
