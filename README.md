@@ -15,7 +15,7 @@ The python package can be installed as follows from the CLI:
 
 To use the RTL-SDR on Linux, it must first be blacklisted as a device.
 
-# Useage
+# Scripts
 
 The scripts available as CLI executables:
 
