@@ -53,8 +53,8 @@ def main():
     window_functions = convert_windows_to_functions(args.windows)
 
     # Schedule measurements
-    t_start = datetime.strptime(args.start, "%Y%m%d %H:%M").replace(tzinfo=local_tz)
-    t_stop = datetime.strptime(args.stop, "%Y%m%d %H:%M").replace(tzinfo=local_tz) if args.stop is not None else None
+    t_start = datetime.strptime(args.start, "%Y%m%d %H:%M")
+    t_stop = datetime.strptime(args.stop, "%Y%m%d %H:%M") if args.stop is not None else None
 
     t_now = datetime.now(local_tz)
     wheel = ["|", "/", "-", "\\"]
