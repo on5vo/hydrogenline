@@ -19,4 +19,5 @@ To use the RTL-SDR on Linux, it must first be blacklisted as a device.
 
 The scripts available as CLI executables:
 
-- `capture`: captures samples repeatedly from the RTL-SDR, calculates and averages the PSD, and stores them
+- `capture`: captures samples repeatedly from the RTL-SDR, calculates and averages the PSD, and stores them.
+- `waterfall`: creates a waterfall plot of the measured PSDs.
