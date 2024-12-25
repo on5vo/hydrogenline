@@ -2,6 +2,7 @@ import argparse
 from hydrogenline.io import load_data, load_settings, get_waterfall_path
 from hydrogenline.dsp import process_psd
 from hydrogenline.plotting import waterfall
+from hydrogenline.utils import progressbar, Bar
 import numpy as np
 
 def main():
@@ -15,15 +16,21 @@ def main():
     args = parser.parse_args()
 
     settings = load_settings(args.folder)
-    datetimes, psds = load_data(args.folder)
+    _, psds = load_data(args.folder)
 
     num_windows = len(settings["windows"])
     path = get_waterfall_path(args.folder)
+
+    progressbar = Bar(num_windows, prefix="Generating waterfall plots")
+    progressbar.reset()
 
     for i in range(num_windows):
         psd = process_psd(psds[i], args.bins, args.meas)
         fig, _ = waterfall(psd, args.peak, args.folder)
         fig.savefig(path / f"{settings['windows'][i]}.jpg", bbox_inches="tight", dpi=600)
+        progressbar.update()
+        
+    progressbar.finish()
 
 if __name__ == "__main__":
     main()

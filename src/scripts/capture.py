@@ -9,6 +9,7 @@ from rtlsdr.rtlsdr import LibUSBError
 
 from hydrogenline.sdr import SDR
 from hydrogenline.io import get_path, get_data_path
+from hydrogenline.utils import Bar
 
 def convert_windows_to_functions(windows):
     window_functions = {
@@ -64,12 +65,16 @@ def main():
         time.sleep(1)
         i += 1
 
+    progressbar = Bar(args.averages)
+
     # Start capturing data
     while t_stop is None or t_stop > t_now:
         t_now = datetime.now(local_tz)
-        print(f"Capturing data... {t_now.strftime('%Y%m%d %H:%M')}", end="\r", flush=True)
-        S = sdr.get_averaged_spectrum(args.averages, window_functions)
+        progressbar.prefix = f"Capturing data {t_now.strftime('%Y%m%d %H:%M')}"
+        progressbar.reset()
+        S = sdr.get_averaged_spectrum(args.averages, window_functions, progressbar=progressbar)
         np.save(get_data_path(args.folder) / f"{t_now.strftime('%Y%m%d_%H:%M:%S')}.npy", S)
+        progressbar.finish()
 
     print("Done!", flush=True)
 
