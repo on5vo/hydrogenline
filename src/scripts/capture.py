@@ -68,14 +68,14 @@ def main():
     # Start capturing data
     while t_stop is None or t_stop > datetime.now(local_tz):
         t_now = datetime.now(local_tz)
-        
+
         progressbar.prefix = f"Capturing data {t_now.strftime('%Y%m%d %H:%M')}"
         progressbar.reset()
 
         S = sdr.get_averaged_spectrum(args.averages, window_functions, progressbar=progressbar)
         np.save(get_data_path(args.folder) / f"{t_now.strftime('%Y%m%d_%H:%M:%S')}.npy", S)
 
-        progressbar.finish()
+    progressbar.finish()
 
     print("Done!", flush=True)
 
