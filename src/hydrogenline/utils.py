@@ -25,7 +25,7 @@ class Bar:
 
     def finish(self) -> None:
         self.progress = self.max
-        print(self, end="\r", flush=True)
+        print(self, end="\n", flush=True)
 
     def __str__(self):
         x = int(self.size * self.progress / self.max)
