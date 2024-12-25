@@ -6,11 +6,6 @@ Data is automatically stored in your home directory under `~/.hydrogenline`. It 
 
 # Installation
 
-The package is available on pypi and can be installed, preferably in a virtual environment, through
-```
-pip install hydrogenline
-```
-
 To use the RTL-SDR on Linux, it must first be blacklisted as a device.
 
 # Scripts
