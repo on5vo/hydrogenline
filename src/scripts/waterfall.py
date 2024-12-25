@@ -2,8 +2,7 @@ import argparse
 from hydrogenline.io import load_data, load_settings, get_waterfall_path
 from hydrogenline.dsp import process_psd
 from hydrogenline.plotting import waterfall
-from hydrogenline.utils import progressbar, Bar
-import numpy as np
+from hydrogenline.utils import Bar
 
 def main():
     # Load settings from CLI
@@ -29,7 +28,7 @@ def main():
         fig, _ = waterfall(psd, args.peak, args.folder)
         fig.savefig(path / f"{settings['windows'][i]}.jpg", bbox_inches="tight", dpi=600)
         progressbar.update()
-        
+
     progressbar.finish()
 
 if __name__ == "__main__":

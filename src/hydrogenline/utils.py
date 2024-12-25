@@ -1,5 +1,3 @@
-
-
 class Bar:
 
     def __init__(self, max: int, prefix: str = "", size: int = 40):

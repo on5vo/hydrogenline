@@ -58,12 +58,10 @@ def main():
     t_stop = datetime.strptime(args.stop, "%Y%m%d %H:%M").replace(tzinfo=local_tz) if args.stop is not None else None
 
     t_now = datetime.now(local_tz)
-    wheel = ["|", "/", "-", "\\"]
-    i = 0
     while t_now < t_start:
-        print(f"Waiting for start time... {wheel[i%len(wheel)]}", end="\r", flush=True)
+        t_now = datetime.now(local_tz)
+        print(f"Waiting to start in {(t_start - t_now).strftime("%H:%M:%S")}", end="\r", flush=True)
         time.sleep(1)
-        i += 1
 
     progressbar = Bar(args.averages)
 
