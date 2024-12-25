@@ -1,3 +1,12 @@
+def format_timedelta(td) -> str:
+    total_seconds = td.total_seconds()
+
+    hours = total_seconds // 3600
+    minutes = (total_seconds % 3600) // 60
+    seconds = total_seconds % 60
+
+    return f"{hours:02.0f}:{minutes:02.0f}:{seconds:02.0f}"
+
 class Bar:
 
     def __init__(self, max: int, prefix: str = "", size: int = 40):

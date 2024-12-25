@@ -9,7 +9,7 @@ from rtlsdr.rtlsdr import LibUSBError
 
 from hydrogenline.sdr import SDR
 from hydrogenline.io import get_path, get_data_path
-from hydrogenline.utils import Bar
+from hydrogenline.utils import Bar, format_timedelta
 
 def convert_windows_to_functions(windows):
     window_functions = {
@@ -60,7 +60,7 @@ def main():
     t_now = datetime.now(local_tz)
     while t_now < t_start:
         t_now = datetime.now(local_tz)
-        print(f"Waiting to start in {(t_start - t_now).strftime("%H:%M:%S")}", end="\r", flush=True)
+        print(f"Waiting to start in {format_timedelta(t_start - t_now)}", end="\r", flush=True)
         time.sleep(1)
 
     progressbar = Bar(args.averages)
