@@ -41,7 +41,7 @@ def _get_hours(folder: str) -> Tuple[List[int], List[int]]:
         hour values (adjusted for time of day).
     """
     path = get_data_path(folder)
-    datetimes = np.asarray([parse_datetime(file) for file in path.iterdir()])
+    datetimes = np.asarray(sorted([parse_datetime(file) for file in path.iterdir()]))
 
     # Add 24h per measured day to keep it after np.unique
     day_offset = np.asarray([(dt.day - datetimes[0].day)*24 for dt in datetimes])
