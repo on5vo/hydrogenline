@@ -67,3 +67,16 @@ def load_data(folder: str) -> Tuple[List[datetime], List[List[NDArray[np.float64
             PSD[j][i,:] = PSD_orig[i][j,:]
 
     return datetimes, PSD
+
+def load_reference(fname: str) -> List[NDArray[np.float64]]:
+    path = get_reference_path(f"{fname}.npy")
+
+    if not path.exists():
+        return None
+
+    loaded = np.load(path)
+
+    settings = load_reference_settings(fname)
+    num_windows = len(settings["windows"])
+
+    return [loaded[i,:] for i in range(num_windows)]
