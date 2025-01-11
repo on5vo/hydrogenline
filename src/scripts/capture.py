@@ -32,6 +32,7 @@ def main():
     parser.add_argument("-w", "--windows", type=str, help="Window functions", nargs="*", choices=["hamming", "hanning", "blackman", "bartlett"], default=["hanning"])
     parser.add_argument("-g", "--gain", type=int, help="Gain in dB", default=0)
     parser.add_argument("-a", "--averages", type=int, help="Number of averages", default=100000)
+    parser.add_argument("-r", "--reference", type=str, help="Name of reference measurement file", default=None)
     parser.add_argument("--start", type=str, help="Start date and time in the format YYYYMMDD HH:MM", default=datetime.now(local_tz).strftime("%Y%m%d %H:%M"))
     parser.add_argument("--stop", type=str, help="End date and time in the format YYYYMMDD HH:MM", default=None)
 
