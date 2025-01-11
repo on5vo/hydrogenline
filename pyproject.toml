@@ -9,7 +9,7 @@ authors = [
 ]
 readme = "README.md"
 requires-python = ">=3.10"
-version = "0.2"
+version = "0.2.1"
 dependencies = [
     "numpy",
     "matplotlib",
@@ -21,6 +21,7 @@ dependencies = [
 [project.scripts]
 capture = "scripts.capture:main"
 waterfall = "scripts.waterfall:main"
+reference = "scripts.reference:main"
 
 [project.urls]
 "Homepage" = "https://github.com/on5vo/hydrogenline"

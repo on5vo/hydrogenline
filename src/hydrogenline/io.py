@@ -24,6 +24,18 @@ def load_settings(folder: str) -> dict:
     with open(get_path(folder) / "settings.json", "rb") as f:
         return json.loads(f.read())
     
+def get_reference_folder() -> Path:
+    path = Path.home() / ".hydrogenline" / "references"
+    path.mkdir(parents=True, exist_ok=True)
+    return path
+
+def get_reference_path(fname: str) -> Path:
+    return get_reference_folder() / fname
+
+def load_reference_settings(fname: str) -> dict:
+    with open(get_reference_folder() / f"{fname}.json", "rb") as f:
+        return json.loads(f.read())
+    
 def parse_datetime(file: Path) -> datetime:
     """
     Parses a datetime from the filename, trying two different formats.
