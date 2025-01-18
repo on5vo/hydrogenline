@@ -1,8 +1,8 @@
 import numpy as np
 from rtlsdr import RtlSdr
-from typing import List, Callable
+from typing import List, Callable, Dict
 from numpy.typing import NDArray
-from hydrogenline.utils import Bar
+from hydrogenline.utils import Bar, convert_windows_to_functions
 
 class SDR:
 
@@ -97,7 +97,7 @@ class SDR:
     def get_frequency(self) -> NDArray:
         return self.center_freq + np.linspace(-1,1,num=self.bins)*self.sample_rate/2
     
-    def get_averaged_spectrum(self, averages: int, windows: List[Callable], progressbar: Bar = None) -> NDArray[np.float64]:
+    def get_averaged_spectrum(self, averages: int, windows: List[Callable], progressbar: Bar = None) -> Dict[str,NDArray[np.float64]]:
         """
         Get an averaged spectrum from multiple FFT samples.
 
@@ -110,15 +110,22 @@ class SDR:
         ---
         - Averaged power spectral density.
         """
-        S = np.zeros((len(windows), self.bins))
+        window_names = convert_windows_to_functions(windows)
 
+        # Init data structure
+        S = {}
+        for window in window_names:
+            S[window] = np.zeros(self.bins)
+
+        # Capture data
         for _ in range(averages):
             samples = self.get_samples()
 
             for i, window in enumerate(windows):
-                S[i,:] += self.to_psd(samples, window)
+                S[window_names[i]] += self.to_psd(samples, window)/averages
 
             if progressbar is not None:
                 progressbar.update()
 
-        return S/averages
+        return S
+    

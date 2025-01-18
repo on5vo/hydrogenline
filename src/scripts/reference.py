@@ -6,17 +6,7 @@ from rtlsdr.rtlsdr import LibUSBError
 
 from hydrogenline.sdr import SDR
 from hydrogenline.io import get_reference_folder, get_reference_path
-from hydrogenline.utils import Bar, format_timedelta
-
-def convert_windows_to_functions(windows):
-    window_functions = {
-        "hamming": np.hamming,
-        "hanning": np.hanning,
-        "blackman": np.blackman,
-        "bartlett": np.bartlett
-    }
-
-    return [window_functions[window] for window in windows]
+from hydrogenline.utils import Bar, convert_windows_to_functions
 
 def main():
     # Load settings from CLI

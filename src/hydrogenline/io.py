@@ -57,15 +57,15 @@ def load_data(folder: str) -> Tuple[List[datetime], Dict[str, NDArray[np.float64
     num_meas = len(files)
 
     # Data with each file containing the PSD for several windowing functions
-    PSD_orig = [np.load(file) for file in files]
+    PSD_orig = [np.load(file, allow_pickle=True).item() for file in files]
 
     # Group data per windowing function
     PSD = {}
-    for j, window in enumerate(settings["windows"]):
+    for window in settings["windows"]:
         PSD[window] = np.zeros((num_meas, bins))
 
         for i in range(num_meas):
-            PSD[window][i,:] = PSD_orig[i][j,:]
+            PSD[window][i,:] = PSD_orig[i][window]
 
     return datetimes, PSD
 
@@ -75,11 +75,4 @@ def load_reference(fname: str) -> Dict[str, NDArray[np.float64]]:
     if not path.exists():
         return None
 
-    loaded = np.load(path)
-    settings = load_reference_settings(fname)
-    data = {}
-
-    for i, window in enumerate(settings["windows"]):
-        data[window] = loaded[i,:]
-
-    return data
+    return np.load(path, allow_pickle=True).item()

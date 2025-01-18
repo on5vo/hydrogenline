@@ -1,3 +1,5 @@
+import numpy as np
+
 def format_timedelta(td) -> str:
     total_seconds = td.total_seconds()
 
@@ -6,6 +8,15 @@ def format_timedelta(td) -> str:
     seconds = total_seconds % 60
 
     return f"{hours:02.0f}:{minutes:02.0f}:{seconds:02.0f}"
+
+def convert_windows_to_functions(windows):
+    window_functions = {
+        "hamming": np.hamming,
+        "hanning": np.hanning,
+        "blackman": np.blackman,
+        "bartlett": np.bartlett
+    }
+    return [window_functions[window] for window in windows]
 
 class Bar:
 
