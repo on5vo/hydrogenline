@@ -33,15 +33,15 @@ def main():
     progressbar = Bar(num_windows, prefix="Generating waterfall plots")
     progressbar.reset()
 
-    for i in range(num_windows):
+    for i, window in enumerate(settings["windows"]):
         if psds_ref is not None:
-            psd_ref = psds_ref[i]
+            psd_ref = psds_ref[window]
         else:
             psd_ref = None
 
-        psd = process_psd(psds[i], args.bins, args.meas, psd_ref=psd_ref)
+        psd = process_psd(psds[window], args.bins, args.meas, psd_ref=psd_ref)
         fig, _ = waterfall(psd, args.peak, args.folder)
-        fig.savefig(path / f"{settings['windows'][i]}.jpg", bbox_inches="tight", dpi=600)
+        fig.savefig(path / f"{window}.jpg", bbox_inches="tight", dpi=600)
         progressbar.update()
 
     progressbar.finish()

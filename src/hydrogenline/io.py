@@ -2,7 +2,7 @@ from pathlib import Path
 import numpy as np
 import json
 from datetime import datetime
-from typing import List, Tuple
+from typing import List, Tuple, Dict
 from numpy.typing import NDArray
 
 def get_path(folder: str) -> Path:
@@ -46,14 +46,13 @@ def parse_datetime(file: Path) -> datetime:
         dt = datetime.strptime(file.name.removesuffix(".npy"), "%Y%m%d_%H_%M_%S")
     return dt
 
-def load_data(folder: str) -> Tuple[List[datetime], List[List[NDArray[np.float64]]]]:
+def load_data(folder: str) -> Tuple[List[datetime], Dict[str, NDArray[np.float64]]]:
     path = get_data_path(folder)
     files = [file for file in path.iterdir()]
 
     datetimes = [parse_datetime(file) for file in files]
 
     settings = load_settings(folder)
-    num_windows = len(settings["windows"])
     bins = settings["bins"]
     num_meas = len(files)
 
@@ -61,22 +60,26 @@ def load_data(folder: str) -> Tuple[List[datetime], List[List[NDArray[np.float64
     PSD_orig = [np.load(file) for file in files]
 
     # Group data per windowing function
-    PSD = [np.zeros((num_meas, bins)) for _ in range(num_windows)]
-    for i in range(num_meas):
-        for j in range(num_windows):
-            PSD[j][i,:] = PSD_orig[i][j,:]
+    PSD = {}
+    for j, window in enumerate(settings["windows"]):
+        PSD[window] = np.zeros((num_meas, bins))
+
+        for i in range(num_meas):
+            PSD[window][i,:] = PSD_orig[i][j,:]
 
     return datetimes, PSD
 
-def load_reference(fname: str) -> List[NDArray[np.float64]]:
+def load_reference(fname: str) -> Dict[str, NDArray[np.float64]]:
     path = get_reference_path(f"{fname}.npy")
 
     if not path.exists():
         return None
 
     loaded = np.load(path)
-
     settings = load_reference_settings(fname)
-    num_windows = len(settings["windows"])
+    data = {}
 
-    return [loaded[i,:] for i in range(num_windows)]
+    for i, window in enumerate(settings["windows"]):
+        data[window] = loaded[i,:]
+
+    return data
