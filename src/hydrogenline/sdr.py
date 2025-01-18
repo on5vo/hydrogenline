@@ -110,14 +110,13 @@ class SDR:
         ---
         - Averaged power spectral density.
         """
-        num_windows = len(windows)
-        S = np.zeros((num_windows, self.bins))
+        S = np.zeros((len(windows), self.bins))
 
         for _ in range(averages):
             samples = self.get_samples()
 
-            for i in range(num_windows):
-                S[i,:] += self.to_psd(samples, windows[i])
+            for i, window in enumerate(windows):
+                S[i,:] += self.to_psd(samples, window)
 
             if progressbar is not None:
                 progressbar.update()
