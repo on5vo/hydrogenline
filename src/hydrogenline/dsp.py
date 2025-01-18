@@ -42,6 +42,15 @@ def zero_baseline(psd: NDArray) -> NDArray:
     return psd - psd_avg
 
 def process_psd(psd: NDArray, bins_med_freq: int, bins_med_time: int, psd_ref: NDArray = None) -> NDArray:
+    """
+    Processes the raw power spectral density by
+    1) removing the gain variation w.r.t. frequency of the receiver (*1)
+    2) applying an optional moving window in which the median is taken over different measurements at a fixed frequency
+    3) applying an optional moving window in which the median is taken over different frequency bins for a fixed measurement
+    4) zeroing the noise floor of all measurements.
+
+    *1 The gain variation of the receiver gain can be passed explicitly as a PSD measured with e.g. 50 Ohms connected instead of the antenna. Alternatively, the gain variation is estimated based on the average over all measurements. Note that this assumes that the hydrogenline is not stationary and experiences a significant Doppler-shift. If not, it will be averaged out.
+    """
     
     if psd_ref is None:
         psd_ref = derive_reference_psd(psd)
