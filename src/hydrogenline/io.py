@@ -20,6 +20,11 @@ def get_waterfall_path(folder: str) -> Path:
     path.mkdir(parents=True, exist_ok=True)
     return path
 
+def get_spectra_path(folder: str, window: str) -> Path:
+    path =  get_path(folder) / "spectra" / window
+    path.mkdir(parents=True, exist_ok=True)
+    return path
+
 def load_settings(folder: str) -> dict:
     with open(get_path(folder) / "settings.json", "rb") as f:
         return json.loads(f.read())

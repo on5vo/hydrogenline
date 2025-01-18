@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib
 from matplotlib import pyplot as plt
 from hydrogenline.io import load_settings, get_data_path, parse_datetime
+from datetime import datetime
 
 from typing import Tuple, List
 from numpy.typing import NDArray
@@ -116,5 +117,26 @@ def waterfall(psd: NDArray, peak: float, folder: str, cmap: str = "gray") -> Tup
     ax.set_xticks([0, bins//2, bins], labels=[f"{f_MHz[0]:.0f}", f"{f_MHz[bins//2]:.0f} MHz", f"{f_MHz[-1]:.0f}"])
     ax.set_yticks(hour_inds, labels=[f"{int(h)}h" for h in hours])
     ax.spines[['bottom', 'left']].set_position(('outward', 20))
+
+    return fig, ax
+
+def psd(psd: NDArray, folder: str, min: float, max: float, datetime: datetime) -> Tuple[matplotlib.figure.Figure, plt.Axes]:
+    bins = len(psd)
+    # Determine frequency range
+    f_MHz = _get_frequency_range(folder, bins)
+
+    fig, ax = plt.subplots(figsize=(8,6))
+
+    ax.set_title(datetime.strftime('%Y/%m/%d %H:%M:%S'), color="gray")
+
+    ax.plot(f_MHz, psd, color='k')
+
+    ax.set_xticks([f_MHz[0], f_MHz[bins//2], f_MHz[-1]], labels=[f"{f_MHz[0]:.0f}", f"{f_MHz[bins//2]:.0f} MHz", f"{f_MHz[-1]:.0f}"])
+    ax.spines[['bottom', 'left']].set_position(('outward', 20))
+
+    ax.set_ylim((min, max))
+    ax.set_yticks([])
+    ax.set_xlim((f_MHz[0], f_MHz[-1]))
+    ax.spines['left'].set_visible(False)
 
     return fig, ax

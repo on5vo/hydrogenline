@@ -23,6 +23,7 @@ dependencies = [
 capture = "scripts.capture:main"
 waterfall = "scripts.waterfall:main"
 reference = "scripts.reference:main"
+spectra = "scripts.spectra:main"
 
 [project.urls]
 "Homepage" = "https://github.com/on5vo/hydrogenline"
