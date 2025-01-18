@@ -26,4 +26,7 @@ reference = "scripts.reference:main"
 spectra = "scripts.spectra:main"
 
 [project.urls]
-"Homepage" = "https://github.com/on5vo/hydrogenline"
+"Homepage" = "https://www.on5vo.be/html/radio/hydrogenline.html"
+"Documentation" = "https://github.com/on5vo/hydrogenline/blob/main/README.md"
+"Repository" = "https://github.com/on5vo/hydrogenline"
+"Download" = "https://github.com/on5vo/hydrogenline/releases"
