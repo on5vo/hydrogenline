@@ -1,4 +1,5 @@
 import numpy as np
+from typing import List, Callable
 
 def format_timedelta(td) -> str:
     total_seconds = td.total_seconds()
@@ -9,7 +10,7 @@ def format_timedelta(td) -> str:
 
     return f"{hours:02.0f}:{minutes:02.0f}:{seconds:02.0f}"
 
-def convert_windows_to_functions(windows):
+def convert_windows_to_functions(windows: List[str]) -> List[Callable]:
     window_functions = {
         "hamming": np.hamming,
         "hanning": np.hanning,
@@ -17,6 +18,15 @@ def convert_windows_to_functions(windows):
         "bartlett": np.bartlett
     }
     return [window_functions[window] for window in windows]
+
+def convert_functions_to_windows(fncs: List[Callable]) -> List[str]:
+    windows = {
+        np.hamming: "hamming",
+        np.hanning: "hanning",
+        np.blackman: "blackman",
+        np.bartlett: "bartlett",
+    }
+    return [windows[fnc] for fnc in fncs]
 
 class Bar:
 

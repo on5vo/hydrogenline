@@ -2,7 +2,7 @@ import numpy as np
 from rtlsdr import RtlSdr
 from typing import List, Callable, Dict
 from numpy.typing import NDArray
-from hydrogenline.utils import Bar, convert_windows_to_functions
+from hydrogenline.utils import Bar, convert_functions_to_windows
 
 class SDR:
 
@@ -110,7 +110,7 @@ class SDR:
         ---
         - Averaged power spectral density.
         """
-        window_names = convert_windows_to_functions(windows)
+        window_names = convert_functions_to_windows(windows)
 
         # Init data structure
         S = {}
