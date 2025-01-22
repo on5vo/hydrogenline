@@ -8,7 +8,7 @@ class SDR:
 
     def __init__(self,
                  sample_rate: int = 2048000,
-                 center_freq: int = 1420000000,
+                 center_freq: int = 1420405751,
                  gain: float = 0.0,
                  bins: int = 2048
                  ) -> None:
