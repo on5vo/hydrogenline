@@ -16,7 +16,7 @@ dependencies = [
     "scipy",
     "tzlocal",
     "pyrtlsdr[lib]",
-    "libusb[lib]",
+    "libusb",
 ]
 
 [project.scripts]
