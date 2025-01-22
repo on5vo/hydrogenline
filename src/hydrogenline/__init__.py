@@ -1,0 +1,26 @@
+from matplotlib import pyplot as plt
+
+plt.rcParams.update({
+    'figure.constrained_layout.use': True,
+    'figure.dpi': 200,
+    'font.size': 12,
+    'axes.edgecolor': 'gray',
+    'xtick.color':    'gray',
+    'ytick.color':    'gray',
+    'axes.titlecolor': 'gray',
+    'axes.labelcolor':'gray',
+    'axes.spines.right':False,
+    'axes.spines.top':  False,
+    'xtick.direction': 'in',
+    'ytick.direction': 'in',
+    'xtick.major.size': 6,
+    'xtick.minor.size': 4,
+    'ytick.major.size': 6,
+    'ytick.minor.size': 4,
+    'xtick.major.pad': 15,
+    'xtick.minor.pad': 15,
+    'ytick.major.pad': 15,
+    'ytick.minor.pad': 15,
+    'savefig.pad_inches': 0,
+    'savefig.format': 'webp',
+    })
