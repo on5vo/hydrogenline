@@ -71,6 +71,12 @@ usb_claim_interface error -6
 rtlsdr: error opening the RTLSDR device: Device or resource busy
 ```
 
+If you have problems regarding librtlsdr or usb on Debian, try
+```bash
+sudo apt update
+sudo apt install librtlsdr
+```
+
 # Use
 
 There are several scripts available as CLI executables. In order to use them, you will have to activate the virtual environment, if you used the installation method above. These scripts include a manual which can be accessed by passing the `-h`argument (e.g. `capture -h`).
