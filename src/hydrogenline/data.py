@@ -1,6 +1,5 @@
 import numpy as np
 from pathlib import Path
-import matplotlib
 from matplotlib import pyplot as plt
 import json
 from datetime import datetime
