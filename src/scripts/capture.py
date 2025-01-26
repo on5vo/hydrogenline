@@ -37,7 +37,7 @@ def main():
     # Time per measurement in seconds
     time_per_meas = args.bins/(args.sample_rate)
     # Number of averages rounded to an int
-    vars(args)["averages"] = args.tint//time_per_meas
+    vars(args)["averages"] = int(args.tint//time_per_meas)
     # Set actual time, accounting for the rounding
     vars(args)["tint"] = args.averages*time_per_meas
     
