@@ -41,13 +41,6 @@ def path_spectra(name: str, window: str, datetime: datetime, format: str = "webp
     return path / f"{datetime.strftime('%Y%m%d_%H_%M_%S')}.{format}"
 
 
-def W2dBm(p):
-    return 10*np.log10(p*1e3)
-
-def dBm2W(p):
-    return np.power(10, p/10 - 3)
-
-
 class Measurement:
 
     def __init__(self, name: str) -> None:
@@ -127,16 +120,16 @@ class Measurement:
         self.dates = [datetime.strptime(file.name.removesuffix(".npy"), "%Y%m%d_%H_%M_%S") for file in files]
 
     @property
-    def psd_dBm(self) -> Dict[str, NDArray[np.float64]]:
-        return dict((k, W2dBm(v)) for k, v in self.psd.items())
+    def psd_dBFS(self) -> Dict[str, NDArray[np.float64]]:
+        return dict((k, 10*np.log10(v)) for k, v in self.psd.items())
     
-    @psd_dBm.setter
-    def psd_dBm(self, p: Dict[str, NDArray[np.float64]]) -> None:
-        self.psd = dict((k, dBm2W(v)) for k, v in p.items())
+    @psd_dBFS.setter
+    def psd_dBFS(self, p: Dict[str, NDArray[np.float64]]) -> None:
+        self.psd = dict((k, np.power(10,v/10)) for k, v in p.items())
 
     @property
-    def reference_psd_dBm(self) -> Dict[str, NDArray[np.float64]]:
-        return dict((k, W2dBm(v)) for k, v in self.reference_psd.items())
+    def reference_psd_dBFS(self) -> Dict[str, NDArray[np.float64]]:
+        return dict((k, 10*np.log10(v)) for k, v in self.reference_psd.items())
     
     @property
     def frequencies(self) -> NDArray[np.float64]:
@@ -195,10 +188,10 @@ class Measurement:
         for window, psds in self.process(normalize=False).items():
 
             mean = np.mean(psds)
-            mean_dBm = W2dBm(mean)
+            mean_dBm = 10*np.log10(mean)
 
             for i, psd in enumerate(psds):
-                psd = W2dBm(psd)
+                psd = 10*np.log10(psd)
 
                 fig, ax = plt.subplots()
                 ax.set_title(self.dates[i].strftime('%Y/%m/%d %H:%M:%S'), color="gray")
@@ -208,11 +201,13 @@ class Measurement:
                 ax.spines[['bottom', 'left']].set_position(('outward', 20))
 
                 ymax = np.ceil(np.max(psd))
-                ymin = np.floor(mean_dBm - 1)
+                ymin = np.floor(mean_dBm)
+                yticks = np.arange(ymin, ymax+1, step=1)
 
                 ax.set_ylim((ymin, ymax))
                 ax.set_xlim((f_MHz[0], f_MHz[-1]))
-                ax.set_ylabel("Power (dB)", ha="left", y=1.03, rotation=0, labelpad=0)
+                ax.set_ylabel("Power (dBFS)", ha="left", y=1.03, rotation=0, labelpad=0)
+                ax.set_yticks(yticks)
 
                 fig.savefig(path_spectra(self.folder, window, self.dates[i], format=format))
 
