@@ -140,7 +140,7 @@ class Measurement:
     
     @property
     def frequencies(self) -> NDArray[np.float64]:
-        return np.linspace(-0.5, 0.5, num=self.bins)*self.sample_rate*1e3 + self.center_freq
+        return np.linspace(-0.5, 0.5, num=self.bins)*self.sample_rate + self.center_freq
 
     def process(self, normalize: bool = True) -> Dict[str, NDArray[np.float64]]:
         # Remove frequency gain variation
@@ -180,7 +180,7 @@ class Measurement:
 
             ax.imshow(psds, vmin=0, vmax=peak*np.max(psds), cmap="gray", aspect="auto")
 
-            ax.set_xticks([0, self.bins//2, self.bins], labels=[f"{f_MHz[0]:.0f}", f"{f_MHz[self.bins//2]:.0f} MHz", f"{f_MHz[-1]:.0f}"])
+            ax.set_xticks([0, self.bins//2, self.bins], labels=[f"{f_MHz[0]:.1f}", f"{f_MHz[self.bins//2]:.1f} MHz", f"{f_MHz[-1]:.1f}"])
             ax.set_yticks(hour_inds, labels=[f"{int(h)}h" for h in hours])
 
             ax.spines[['bottom', 'left']].set_position(('outward', 20))
@@ -204,7 +204,7 @@ class Measurement:
                 ax.set_title(self.dates[i].strftime('%Y/%m/%d %H:%M:%S'), color="gray")
                 ax.plot(f_MHz, psd, color='k')
 
-                ax.set_xticks([f_MHz[0], f_MHz[self.bins//2], f_MHz[-1]], labels=[f"{f_MHz[0]:.0f}", f"{f_MHz[self.bins//2]:.0f} MHz", f"{f_MHz[-1]:.0f}"])
+                ax.set_xticks([f_MHz[0], f_MHz[self.bins//2], f_MHz[-1]], labels=[f"{f_MHz[0]:.1f}", f"{f_MHz[self.bins//2]:.1f} MHz", f"{f_MHz[-1]:.1f}"])
                 ax.spines[['bottom', 'left']].set_position(('outward', 20))
 
                 ymax = np.ceil(np.max(psd))
@@ -212,7 +212,7 @@ class Measurement:
 
                 ax.set_ylim((ymin, ymax))
                 ax.set_xlim((f_MHz[0], f_MHz[-1]))
-                ax.set_ylabel("Power (dBm)", ha="left", y=1.03, rotation=0, labelpad=0)
+                ax.set_ylabel("Power (dB)", ha="left", y=1.03, rotation=0, labelpad=0)
 
                 fig.savefig(path_spectra(self.folder, window, self.dates[i], format=format))
 
