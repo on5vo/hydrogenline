@@ -167,7 +167,7 @@ class Measurement:
 
         # Create waterfall plot for each window function
         for window, psds in self.process().items():
-            fig, ax = plt.subplots(figsize=(6,len(hours)*0.3))
+            fig, ax = plt.subplots(figsize=(6,max(len(hours)*0.3,4)))
             fig.set_facecolor("black")
             ax.set_title(f"{self.dates[0].strftime('%Y/%m/%d %H:%M')} - {self.dates[-1].strftime('%Y/%m/%d %H:%M')}", color="gray")
 
