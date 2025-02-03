@@ -216,3 +216,71 @@ class Measurement:
                 progressbar.update()
 
         progressbar.finish()
+
+
+class Reference:
+
+    def __init__(self, name: str) -> None:
+        self.fname: str = ""
+        self.bins: int = 0
+        self.sample_rate: int = 0
+        self.windows: List[str] = []
+        self.gain: int = 0
+        self.averages: int = 0
+        self.center_freq: int = 0
+
+        self.psd: Dict[str, NDArray[np.float64]] = {}
+
+        # Load settings and measurement data
+        self._load_settings(name)
+        self._load_data(name)
+
+    def _load_settings(self, name: str) -> None:
+        # Load settings from file
+        with open(path_reference_settings(name), "rb") as f:
+            settings = json.loads(f.read())
+
+        # Create class parameters from settings
+        for k, v in settings.items():
+            setattr(self, k, v)
+
+    def _load_data(self, name: str) -> None:
+        self.psd = np.load(path_reference_data(name), allow_pickle=True).item()
+
+    @property
+    def psd_dBFS(self) -> Dict[str, NDArray[np.float64]]:
+        return dict((k, 10*np.log10(v)) for k, v in self.psd.items())
+    
+    @psd_dBFS.setter
+    def psd_dBFS(self, p: Dict[str, NDArray[np.float64]]) -> None:
+        self.psd = dict((k, np.power(10,v/10)) for k, v in p.items())
+    
+    @property
+    def frequencies(self) -> NDArray[np.float64]:
+        return np.linspace(-0.5, 0.5, num=self.bins)*self.sample_rate + self.center_freq
+    
+    def save_spectrum(self, format: str = "webp") -> None:
+        f_MHz = self.frequencies/1e6
+
+        for window, psd in self.psd.items():
+            psd = 10*np.log10(psd)
+
+            fig, ax = plt.subplots()
+            ax.set_title(self.fname + " " + window, color="gray")
+            ax.plot(f_MHz, psd, color='k')
+
+            ax.set_xticks([f_MHz[0], f_MHz[self.bins//2], f_MHz[-1]], labels=[f"{f_MHz[0]:.1f}", f"{f_MHz[self.bins//2]:.1f} MHz", f"{f_MHz[-1]:.1f}"])
+            ax.spines[['bottom', 'left']].set_position(('outward', 20))
+
+            ymax = np.ceil(np.max(psd))
+            ymin = np.floor(np.min(psd))
+            # yticks = np.arange(ymin, ymax+1, step=2)
+
+            ax.set_ylim((ymin, ymax))
+            ax.set_xlim((f_MHz[0], f_MHz[-1]))
+            ax.set_ylabel("Power (dBFS)", ha="left", y=1.03, rotation=0, labelpad=0)
+            # ax.set_yticks(yticks)
+
+            fig.savefig(path_reference() / f"{self.fname}_{window}.{format}")
+
+            plt.close(fig)
